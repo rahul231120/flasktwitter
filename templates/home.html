@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h2>Home</h2>
+  <ul>
+    <p><a href="{{ url_for('user_profile', username=current_user.username) }}">View Profile</a></p>
+    <div class="buttons-container"></div>
+    {% for tweet in tweets %}
+      <li>
+        {{ tweet.author.username }} - {{ tweet.content }} - {{ tweet.date_posted }}
+        <button id="like-button-{{ tweet.id }}" data-tweetId="{{ tweet.id }}">Like</button>
+        <button id="retweet-button-{{ tweet.id }}" data-tweetId="{{ tweet.id }}">Retweet</button>
+      </li>
+    {% endfor %}
+  </ul>
+  <p><a href="{{ url_for('post') }}">Post a Tweet</a></p>
+{% endblock %}
+
+{% block body_scripts %}
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

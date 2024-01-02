@@ -1,0 +1,53 @@
+<!-- profile.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s Profile{% endblock %}
+
+{% block content %}
+    <h2>{{ user.username }}'s Profile</h2>
+
+    <div>
+        <p>Email: {{ user.email }}</p>
+        <p>Joined on: {% if user.date_joined %}{{ user.date_joined.strftime('%Y-%m-%d %H:%M:%S') }}{% else %}N/A{% endif %}</p>
+        <!-- Add more user details here as needed -->
+    </div>
+    <div>
+        <!-- Display user details -->
+    
+        {% if current_user != user %}
+            {% if current_user.is_following(user) %}
+                <form action="{{ url_for('unfollow_user', user_id=user.id) }}" method="post">
+                    <button type="submit">Unfollow</button>
+                </form>
+            {% else %}
+                <form action="{{ url_for('follow_user', user_id=user.id) }}" method="post">
+                    <button type="submit">Follow</button>
+                </form>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <h3>Recent Tweets</h3>
+    <ul>
+        {% for tweet in user.tweets %}
+            <li>{{ tweet.content }} - {{ tweet.date_posted }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Followers: {{ user.followers.count() }}</h3>
+    <ul>
+        {% for follower in user.followers %}
+            <li>{{ follower.username }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Following: {{ user.following.count() }}</h3>
+    <ul>
+        {% for followed_user in user.following %}
+            <li>{{ followed_user.username }}</li>
+        {% endfor %}
+    </ul>
+    
+    
+{% endblock %}
